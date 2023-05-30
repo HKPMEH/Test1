@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Capture Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"],
+        input[type="reset"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Capture Form</h1>
+    <form id="dataForm">
+        <label for="site">Site:</label>
+        <input type="text" id="site" name="site" required><br>
+
+        <label for="dateOfTransit">Date of Transit:</label>
+        <input type="date" id="dateOfTransit" name="dateOfTransit" required><br>
+
+        <label for="itemDescription">Item Description:</label>
+        <input type="text" id="itemDescription" name="itemDescription" required><br>
+
+        <label for="freshOrSecondhand">Fresh / Secondhand:</label>
+        <input type="text" id="freshOrSecondhand" name="freshOrSecondhand" required><br>
+
+        <label for="value">Value:</label>
+        <input type="number" id="value" name="value" step="0.01" required><br>
+
+        <label for="consignmentValue">Consignment Value @110%:</label>
+        <input type="number" id="consignmentValue" name="consignmentValue" step="0.01" readonly><br>
+
+        <label for="transitFrom">Transit From:</label>
+        <input type="text" id="transitFrom" name="transitFrom" required><br>
+
+        <label for="transitTo">Transit To:</label>
+        <input type="text" id="transitTo" name="transitTo" required><br>
+
+        <label for="transitThrough">Transit Through:</label>
+        <input type="text" id="transitThrough" name="transitThrough"><br>
+
+        <label for="emailFrom">Email From:</label>
+        <input type="email" id="emailFrom" name="emailFrom" required><br>
+
+        <label for="emailDtd">Email Dtd.:</label>
+        <input type="date" id="emailDtd" name="emailDtd" required><br>
+
+        <label for="contactNo">Contact No. of Emailer:</label>
+        <input type="tel" id="contactNo" name="contactNo" required><br>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+
+    <script>
+        // Calculate the consignment value automatically
+        document.getElementById("value").addEventListener("input", function() {
+            var value = parseFloat(this.value);
+            var consignmentValue = value * 1.1;
+            document.getElementById("consignmentValue").value = consignmentValue.toFixed(2);
+        });
+
+        // Handle form submission
+        document.getElementById("dataForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Retrieve form data
+            var formData = new FormData(this);
+            var data = {};
+            formData.forEach(function(value, key) {
+                data[key] = value;
+            });
+
+            // Send form data to the server
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://your-server-endpoint-url", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(data));
+
+            // Display a confirmation message
+            alert("Data submitted successfully!");
+
+            // Reset the form
+            this.reset();
+        });
+    </script>
+</body>
+</html>
